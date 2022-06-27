@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: litecoin
+spec:
+  selector:
+    matchLabels:
+      app: litecoin
+  serviceName: "litecoin-service"
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: litecoin
+    spec:
+      containers:
+      - name: litecoin-container 
+        image: knonyelu/litecoin:latest
+        ports:
+        - containerPort: 9332
+          name: port1
+        - containerPort: 9333
+          name: port2
+        - containerPort: 19332
+          name: port3
+        - containerPort: 19333
+          name: port4
+        volumeMounts:
+        - name: litecoin-pvc
+          mountPath: /litecoin
+  volumeClaimTemplates:
+  - metadata:
+      name: litecoin-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
