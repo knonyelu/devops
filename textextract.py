@@ -1,8 +1,10 @@
-lines = []
+import re
 
-with open ('terraform.tfvars', 'rt') as myfile:
-    contents = myfile.read()
-    
-for line in myfile:
-    lines.append(line)
-print(lines)
+def extract():
+    with open("terraform.tfvars","r") as file:
+        for line in file:
+            if re.search('accountid', line):
+                return line.split()[-1]
+
+if __name__ == "__main__":
+    extract()
